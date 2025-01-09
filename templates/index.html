@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium web scraper</title>
+</head>
+<body>
+    <a style="text-decoration: underline; color:rgb(39, 39, 255); cursor: pointer;" id="script_runner">Click here to run the script.</a>
+    <div id="display_box"></div>
+    
+    <script>
+        const runner = document.getElementById('script_runner');
+        runner.addEventListener('click', runScript);
+        const display = document.getElementById('display_box')
+        async function runScript() {
+            display.innerHTML= ''
+            try {
+                const response = await fetch('/run-script', {
+                method: 'GET'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+
+                    const ul = document.createElement('ul');
+                    for(let i = 1; i <= 5; i++) {
+                        const li = document.createElement('li');
+                        li.textContent = data[`nameOfTrend${i}`] || `Trend ${i} is not available`;
+                        ul.appendChild(li);
+                    }
+
+                    display.appendChild(ul);
+                    const ip = document.createElement('p');
+                    ip.textContent = `The IP address used for this query was ${data.ip_address}.`;
+                    display.appendChild(ip);
+                } else {
+                    display.textContent = 'Error: There was a problem fetching the data.';
+                    setTimeout(() => {
+                        display.innerHTML = ''
+                    }, 4000)
+                }
+            } catch (error) {
+                display.textContent = 'There was a problem completing the request';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
