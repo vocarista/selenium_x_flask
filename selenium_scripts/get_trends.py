@@ -28,8 +28,7 @@ def get_trending_topics():
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
-    # if PROXYMESH_URL:
-    #     options.add_argument(f'--proxy-server={PROXYMESH_URL}')
+    # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
 
     driver = webdriver.Chrome(options=options)
 
@@ -43,6 +42,16 @@ def get_trending_topics():
         username.send_keys(X_USERNAME)
         username.send_keys(Keys.RETURN)
         time.sleep(random.uniform(3, 6))
+
+        try:
+            WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.NAME, 'text')))
+            email = driver.find_element(By.NAME, 'text')
+            email.send_keys(X_EMAIL)
+            email.send_keys(Keys.RETURN)
+            time.sleep(random.uniform(4, 8))
+            print("Email step completed.")
+        except Exception:
+            print("Email step not required.")
         
         WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'password')))
         password = driver.find_element(By.NAME, 'password')
@@ -51,8 +60,8 @@ def get_trending_topics():
         time.sleep(random.uniform(4, 8)) 
 
         try:
-            WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.NAME, 'email')))
-            email = driver.find_element(By.NAME, 'email')
+            WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.NAME, 'text')))
+            email = driver.find_element(By.NAME, 'text')
             email.send_keys(X_EMAIL)
             email.send_keys(Keys.RETURN)
             time.sleep(random.uniform(4, 8))
